@@ -1,0 +1,24 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-dmg:
+    name: Build DMG
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and create DMG
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          ./Scripts/build-dmg.sh "$VERSION"
+
+      - name: Upload DMG to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: MacMule-*.dmg
