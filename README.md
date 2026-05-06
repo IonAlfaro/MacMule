@@ -26,13 +26,15 @@ MacMule is a native macOS eD2k/eMule-style client built with SwiftUI, backed by 
 xcodebuild -project MacMule.xcodeproj -scheme MacMule -configuration Debug -destination 'platform=macOS' build
 ```
 
-## Build DMG
+## Release
+
+Push a version tag to trigger the DMG build:
 
 ```bash
-./Scripts/build-dmg.sh [version]
+git tag v0.1.0 && git push origin v0.1.0
 ```
 
-The version argument is optional and defaults to a date-based snapshot.
+The `.dmg` will be attached to the GitHub release automatically via Actions.
 
 ## Test the core package
 
@@ -45,8 +47,7 @@ swift test
 
 - `MacMule/`: macOS app target
 - `MacMuleCore/`: reusable core package and daemon
-- `Scripts/`: build and distribution scripts
-- `Docs/`: implementation notes and parity plans
+- `Docs/`: implementation notes and parity plans (local only)
 
 ## License
 
