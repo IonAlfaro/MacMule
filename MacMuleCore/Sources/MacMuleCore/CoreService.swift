@@ -899,7 +899,7 @@ public final class MacMuleCoreService: @unchecked Sendable {
         initialSources: [ED2KFoundSource] = []
     ) throws -> CoreSnapshot {
         guard checkDiskSpace(for: link.sizeInBytes) else {
-            emitNetworkLog("No hay suficiente espacio en disco para: \(link.fileName)")
+            emitNetworkLog("Not enough disk space for: \(link.fileName)")
             return snapshot()
         }
         let (snapshot, transfer) = try withLock {
@@ -1842,7 +1842,7 @@ public final class MacMuleCoreService: @unchecked Sendable {
             return (nil, nil, false)
         case .searchResults(let results):
             mergeSearchResultsLocked(results)
-            let searchLabel = activeSearchQuery.map { " para \($0)" } ?? ""
+            let searchLabel = activeSearchQuery.map { " for \($0)" } ?? ""
             updateNetworkLocked(
                 isConnected: state.network.isConnected,
                 statusText: "\(state.searchResults.count) result(s)\(searchLabel)",
@@ -2719,10 +2719,10 @@ public final class MacMuleCoreService: @unchecked Sendable {
             emitNetworkLog("eD2k peer helloanswer received from \(endpoint.address) on port \(hello.tcpPort)")
             sendPeerDownloadNegotiation(transferID: transferID, fileHash: fileHash, endpoint: endpoint)
         case .partHashSet(let hashSet):
-            emitNetworkLog("eD2k peer hashset received: \(hashSet.partHashes.count) part(es) desde \(endpoint.address)")
+            emitNetworkLog("eD2k peer hashset received: \(hashSet.partHashes.count) part(s) from \(endpoint.address)")
             applyPeerPartHashSet(hashSet, transferID: transferID, endpoint: endpoint)
         case .sourceExchangeAnswer(let answer):
-            emitNetworkLog("eD2k peer source-exchange received: \(answer.sources.count) fuente(s) desde \(endpoint.address)")
+            emitNetworkLog("eD2k peer source-exchange received: \(answer.sources.count) source(s) from \(endpoint.address)")
             applyPeerSourceExchangeAnswer(answer, transferID: transferID, endpoint: endpoint)
         case .partRequest:
             emitNetworkLog("eD2k peer requested upload parts: \(endpoint.address)")
@@ -3015,7 +3015,7 @@ public final class MacMuleCoreService: @unchecked Sendable {
         if lowIDCount > 0 {
             let queuedCount = queueServerCallbackRequestsLocked(sources, fileHash: fileHash, transferID: transferID)
             if queuedCount > 0 {
-                emitNetworkLog("eD2k \(queuedCount) fuente(s) LowID encoladas para callback de servidor.")
+                emitNetworkLog("eD2k \(queuedCount) LowID source(s) queued for server callback.")
             }
         }
 
@@ -3341,7 +3341,7 @@ public final class MacMuleCoreService: @unchecked Sendable {
 
         if startPeerFailoverIfNeeded(for: transferID) == false,
            let transfer = withLock({ state.transfers.first(where: { $0.id == transferID }) }) {
-            emitNetworkLog("eD2k peer agotado en \(endpoint.address), pidiendo mas fuentes para \(transfer.ed2kHash)")
+            emitNetworkLog("eD2k peer exhausted at \(endpoint.address), requesting more sources for \(transfer.ed2kHash)")
             requestSourcesIfPossible(for: transfer, force: true)
         }
     }

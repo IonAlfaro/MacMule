@@ -83,7 +83,7 @@ public final class UPnPPortMapper: ED2KPeerPortMapper, @unchecked Sendable {
                 return UPnPPortMappingResult(
                     tcpMapped: false,
                     udpMapped: false,
-                    detail: "No se pudo resolver la IP local para el mapeo."
+                    detail: "Could not resolve local IP for mapping."
                 )
             }
 
@@ -459,7 +459,7 @@ enum UPnPPortMapperError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .socketCreationFailed:
-            return "No se pudo crear el socket SSDP para UPnP."
+            return "Could not create SSDP socket for UPnP."
         case .discoverySendFailed:
             return "No se pudo enviar la peticion SSDP a la red local."
         case .invalidResponse:

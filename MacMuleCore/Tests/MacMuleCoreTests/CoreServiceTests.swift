@@ -200,7 +200,7 @@ final class CoreServiceTests: XCTestCase {
         transport.simulateState(.ready)
         let connectedSnapshot = service.snapshot()
         XCTAssertTrue(connectedSnapshot.network.isConnected)
-        XCTAssertEqual(connectedSnapshot.network.statusText, "Login enviado a 127.0.0.1:4661")
+        XCTAssertEqual(connectedSnapshot.network.statusText, "Login sent to 127.0.0.1:4661")
         XCTAssertEqual(service.events(after: 0).events.map(\.kind), [.networkUpdated, .networkUpdated, .networkUpdated, .networkUpdated, .networkUpdated])
     }
 
@@ -307,7 +307,7 @@ final class CoreServiceTests: XCTestCase {
         _ = service.connectToServer(configuration, transport: transport)
         transport.simulateState(.waiting("dns lookup"))
 
-        XCTAssertEqual(service.snapshot().network.statusText, "Esperando conexion a 127.0.0.1:4661")
+        XCTAssertEqual(service.snapshot().network.statusText, "Waiting for connection to 127.0.0.1:4661")
         XCTAssertTrue(logs.values.contains(where: { $0.contains("eD2k waiting: dns lookup") }))
     }
 
@@ -489,7 +489,7 @@ final class CoreServiceTests: XCTestCase {
 
         XCTAssertTrue(service.snapshot().network.isConnected)
         XCTAssertFalse(service.snapshot().network.highID)
-        XCTAssertTrue(service.snapshot().network.statusText.contains("Conectado con LowID"))
+        XCTAssertTrue(service.snapshot().network.statusText.contains("Connected with LowID"))
     }
 
     func testLowIDStillAllowsSearchRequests() throws {
@@ -711,7 +711,7 @@ final class CoreServiceTests: XCTestCase {
 
         let searchSnapshot = service.search(query: "ubuntu iso")
         XCTAssertTrue(searchSnapshot.searchResults.isEmpty)
-        XCTAssertEqual(searchSnapshot.network.statusText, "Login enviado a 127.0.0.1:4661")
+        XCTAssertEqual(searchSnapshot.network.statusText, "Login sent to 127.0.0.1:4661")
         XCTAssertEqual(transport.sentData.count, 1)
 
         transport.simulateReceive(idChangePacket().encoded())
@@ -737,7 +737,7 @@ final class CoreServiceTests: XCTestCase {
         XCTAssertEqual(snapshot.searchResults[0].network, "127.0.0.1:4661")
         XCTAssertEqual(snapshot.searchResults[0].sourceClientID, 0x01020304)
         XCTAssertEqual(snapshot.searchResults[0].sourceClientPort, 4662)
-        XCTAssertEqual(snapshot.network.statusText, "1 resultado(s) para ubuntu iso")
+        XCTAssertEqual(snapshot.network.statusText, "1 result(s) for ubuntu iso")
     }
 
     func testAddED2KLinkSeedsInitialSearchSourceAndPeerHelloUsesServerClientID() throws {
@@ -885,7 +885,7 @@ final class CoreServiceTests: XCTestCase {
 
         XCTAssertEqual(requestedEndpoints.values, [firstEndpoint])
         XCTAssertEqual(service.snapshot().network.statusText, "Offline")
-        XCTAssertTrue(logs.values.contains(where: { $0.contains("reconnection") }))
+        XCTAssertTrue(logs.values.contains(where: { $0.contains("reconnect") }))
     }
 
     func testFoundSourcesUpdatesTransferSourceCounts() throws {
@@ -956,7 +956,7 @@ final class CoreServiceTests: XCTestCase {
         XCTAssertEqual(transfer.sources, 1)
         XCTAssertEqual(transfer.availability, 0)
         XCTAssertFalse(peerTransport.startCalled)
-        XCTAssertTrue(logs.values.contains(where: { $0.contains("LowID encoladas para callback de servidor") }))
+        XCTAssertTrue(logs.values.contains(where: { $0.contains("LowID source(s) queued for server callback") }))
         let callbackRequest = try XCTUnwrap(
             serverTransport.sentData.compactMap({ try? ED2KPacket.decode($0) })
                 .first(where: { $0.opcode == ED2KPacketOpcode.callbackRequest.rawValue })

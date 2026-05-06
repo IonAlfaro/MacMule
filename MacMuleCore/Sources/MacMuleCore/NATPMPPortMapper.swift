@@ -136,7 +136,7 @@ public final class NATPMPPortMapper: ED2KPeerPortMapper, @unchecked Sendable {
             return UPnPPortMappingResult(
                 tcpMapped: false,
                 udpMapped: false,
-                detail: "No se pudo resolver la puerta de enlace local para NAT-PMP."
+                detail: "Could not resolve local gateway for NAT-PMP."
             )
         }
 
@@ -360,7 +360,7 @@ enum NATPMPPortMapperError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .socketCreationFailed:
-            return "No se pudo crear el socket UDP para NAT-PMP."
+            return "Could not create UDP socket for NAT-PMP."
         case .invalidGatewayAddress(let address):
             return "La puerta de enlace NAT-PMP no tenia una direccion IPv4 valida: \(address)."
         case .sendFailed(let code):
