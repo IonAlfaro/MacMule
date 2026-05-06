@@ -23,3 +23,6 @@ MacMuleCore/Package.resolved
 *.log
 *.sock
 *.pid
+
+# Local documentation
+Docs/
