@@ -1,0 +1,25 @@
+**/.DS_Store
+
+# Xcode
+DerivedData/
+build/
+xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# SwiftPM
+.build/
+.swiftpm/
+MacMuleCore/Package.resolved
+
+# Editors
+.vscode/
+.idea/
+
+# Build artifacts
+.build-dmg/
+
+# Logs and local runtime files
+*.log
+*.sock
+*.pid

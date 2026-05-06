@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FDB1920D2F9EB100005C4A8E /* MacMuleCore in Frameworks */ = {isa = PBXBuildFile; productRef = FDB1920E2F9EB100005C4A8E /* MacMuleCore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		FDB191FF2F9EAB58005C4A8E /* MacMule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDB1920D2F9EB100005C4A8E /* MacMuleCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +60,7 @@
 				FDB191FB2F9EAB58005C4A8E /* Sources */,
 				FDB191FC2F9EAB58005C4A8E /* Frameworks */,
 				FDB191FD2F9EAB58005C4A8E /* Resources */,
+				FDB192102F9EB330005C4A8E /* Bundle Core Daemon */,
 			);
 			buildRules = (
 			);
@@ -65,6 +71,7 @@
 			);
 			name = MacMule;
 			packageProductDependencies = (
+				FDB1920E2F9EB100005C4A8E /* MacMuleCore */,
 			);
 			productName = MacMule;
 			productReference = FDB191FF2F9EAB58005C4A8E /* MacMule.app */;
@@ -94,6 +101,9 @@
 			);
 			mainGroup = FDB191F62F9EAB58005C4A8E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FDB1920D2F9EB0FF005C4A8E /* XCLocalSwiftPackageReference "MacMuleCore" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FDB192002F9EAB58005C4A8E /* Products */;
 			projectDirPath = "";
@@ -113,6 +123,30 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FDB192102F9EB330005C4A8E /* Bundle Core Daemon */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/MacMuleCore/Package.swift",
+			);
+			name = "Bundle Core Daemon";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(CONTENTS_FOLDER_PATH)/MacOS/macmule-core-daemon",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -euo pipefail\n\nCONFIGURATION_LC=$(printf '%s' \"$CONFIGURATION\" | tr '[:upper:]' '[:lower:]')\nSCRATCH_PATH=\"$DERIVED_FILE_DIR/MacMuleCoreDaemonBuild\"\nDAEMON_OUTPUT=\"$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/MacOS/macmule-core-daemon\"\n\nswift build \\\n  --package-path \"$SRCROOT/MacMuleCore\" \\\n  --product macmule-core-daemon \\\n  --configuration \"$CONFIGURATION_LC\" \\\n  --scratch-path \"$SCRATCH_PATH\"\n\nmkdir -p \"$(dirname \"$DAEMON_OUTPUT\")\"\ncp \"$SCRATCH_PATH/$CONFIGURATION_LC/macmule-core-daemon\" \"$DAEMON_OUTPUT\"\nchmod 755 \"$DAEMON_OUTPUT\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FDB191FB2F9EAB58005C4A8E /* Sources */ = {
@@ -248,12 +282,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MacMule/MacMule.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -278,12 +314,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MacMule/MacMule.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -325,6 +363,21 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		FDB1920D2F9EB0FF005C4A8E /* XCLocalSwiftPackageReference "MacMuleCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = MacMuleCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FDB1920E2F9EB100005C4A8E /* MacMuleCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FDB1920D2F9EB0FF005C4A8E /* XCLocalSwiftPackageReference "MacMuleCore" */;
+			productName = MacMuleCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FDB191F72F9EAB58005C4A8E /* Project object */;
 }

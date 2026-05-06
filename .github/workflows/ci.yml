@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    name: Build & Test (macOS)
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build app
+        run: |
+          xcodebuild \
+            -project MacMule.xcodeproj \
+            -scheme MacMule \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            build
+
+      - name: Test core package
+        run: |
+          cd MacMuleCore
+          swift test
