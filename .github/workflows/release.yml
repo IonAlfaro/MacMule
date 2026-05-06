@@ -13,10 +13,47 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and create DMG
+      - name: Create export options plist
+        run: |
+          cat > export-options.plist << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>developer-id</string>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Build and archive
+        run: |
+          xcodebuild \
+            -project MacMule.xcodeproj \
+            -scheme MacMule \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            -archivePath .build/MacMule.xcarchive \
+            archive
+
+      - name: Export archive
+        run: |
+          xcodebuild \
+            -archivePath .build/MacMule.xcarchive \
+            -exportArchive \
+            -exportPath .build/Export \
+            -exportOptionsPlist export-options.plist
+
+      - name: Create DMG
         run: |
           VERSION="${GITHUB_REF#refs/tags/v}"
-          ./Scripts/build-dmg.sh "$VERSION"
+          hdiutil create \
+            -volname "MacMule" \
+            -srcfolder .build/Export/MacMule.app \
+            -ov \
+            -format UDZO \
+            -imagekey zlib-level=9 \
+            "MacMule-${VERSION}.dmg"
 
       - name: Upload DMG to Release
         uses: softprops/action-gh-release@v2
