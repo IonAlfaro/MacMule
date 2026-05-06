@@ -1090,6 +1090,7 @@ public final class MacMuleCoreService: @unchecked Sendable {
                     )
                 }
                 handleCorruptChunk(for: id, offset: offset, length: byteCount)
+                state.transfers[index].status = .queued
             }
 
             creditsList?.addDownloadBytes(byteCount, for: Data())
@@ -1177,7 +1178,13 @@ public final class MacMuleCoreService: @unchecked Sendable {
             var record = try transferStore.loadRecord(for: transferID)
             record.chunkMap.clearWritten(offset: offset, length: length)
             record.transfer.completedBytes = record.chunkMap.completedBytes
-            try transferStore.upsert(record.transfer)
+            record.transfer.status = .queued
+            let chunk = record.chunkMap.chunks.first { $0.offset <= offset && offset < $0.offset + $0.length }
+            if let chunk, chunk.index < record.verifiedPartHashes.count {
+                record.verifiedPartHashes[chunk.index] = nil
+            }
+            record.updatedAt = Date()
+            try transferStore.save(record)
         } catch {
             emitNetworkLog("AICH recovery: failed to handle corrupt chunk: \(error.localizedDescription)")
         }

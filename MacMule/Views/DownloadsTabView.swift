@@ -10,6 +10,7 @@ struct DownloadsTabView: View {
         case all = "All"
         case downloading = "Downloading"
         case paused = "Paused"
+        case failed = "Error"
         case completed = "Completed"
     }
     
@@ -24,6 +25,7 @@ struct DownloadsTabView: View {
         case .all: store.downloads
         case .downloading: store.downloads.filter { $0.status == .downloading }
         case .paused: store.downloads.filter { $0.status == .paused }
+        case .failed: store.downloads.filter { $0.status == .failed }
         case .completed: store.downloads.filter { $0.status == .completed }
         }
     }
@@ -58,6 +60,16 @@ struct DownloadsTabView: View {
                         HStack(spacing: 6) {
                             FileIcon(kind: download.kind, size: .small)
                             Text(download.fileName)
+                        }
+                        .contextMenu {
+                            if download.status == .failed {
+                                Button("Retry") {
+                                    store.retryDownload(downloadID: download.id)
+                                }
+                            }
+                            Button("Delete") {
+                                store.removeDownload(downloadID: download.id)
+                            }
                         }
                     }
                     .width(300)

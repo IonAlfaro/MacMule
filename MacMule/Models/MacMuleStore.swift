@@ -448,6 +448,14 @@ final class MacMuleStore: ObservableObject {
         }
     }
 
+    func retryDownload(downloadID: TransferItem.ID) {
+        Task {
+            let snapshot = await core.setDownloadPaused(id: downloadID, paused: false)
+            updateCoreRuntimeStatus()
+            apply(snapshot)
+        }
+    }
+
     func removeDownload(downloadID: TransferItem.ID) {
         Task {
             let snapshot = await core.removeDownload(id: downloadID)

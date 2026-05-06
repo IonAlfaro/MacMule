@@ -735,7 +735,7 @@ public final class CoreTransferStore {
         return try decoder.decode(CoreTransferRecord.self, from: data)
     }
 
-    private func save(_ record: CoreTransferRecord) throws {
+    func save(_ record: CoreTransferRecord) throws {
         let data = try encoder.encode(record)
         try data.write(to: metadataURL(for: record.transfer.id), options: [.atomic])
     }
