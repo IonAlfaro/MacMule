@@ -16,6 +16,9 @@ MacMuleCore/Package.resolved
 .vscode/
 .idea/
 
+# Internal docs
+Docs/
+
 # Build artifacts
 .build-dmg/
 

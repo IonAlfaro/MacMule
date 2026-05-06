@@ -3377,7 +3377,7 @@ public final class MacMuleCoreService: @unchecked Sendable {
             return false
         }
 
-        emitNetworkLog("eD2k peer failover intentando \(plan.endpoint.address) para \(plan.transferID.uuidString)")
+        emitNetworkLog("eD2k peer failover attempting \(plan.endpoint.address) for \(plan.transferID.uuidString)")
         startPeerDownload(using: plan)
         startPeerDownloadsIfPossible(for: transferID)
         return true

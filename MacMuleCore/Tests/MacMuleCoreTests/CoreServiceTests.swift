@@ -194,7 +194,7 @@ final class CoreServiceTests: XCTestCase {
 
         let connectingSnapshot = service.connectToServer(configuration, transport: transport)
         XCTAssertFalse(connectingSnapshot.network.isConnected)
-        XCTAssertEqual(connectingSnapshot.network.statusText, "Conectando a 127.0.0.1:4661")
+        XCTAssertEqual(connectingSnapshot.network.statusText, "Connecting to 127.0.0.1:4661")
 
         listenerTransport.simulateState(.ready(4662))
         transport.simulateState(.ready)
@@ -440,7 +440,7 @@ final class CoreServiceTests: XCTestCase {
 
         firstTransport.simulateState(.failed("old connection failed"))
 
-        XCTAssertEqual(service.snapshot().network.statusText, "Conectando a \(secondEndpoint.address)")
+        XCTAssertEqual(service.snapshot().network.statusText, "Connecting to \(secondEndpoint.address)")
     }
 
     func testServerMessageUpdatesNetworkStatusAndEmitsLog() {
@@ -551,7 +551,7 @@ final class CoreServiceTests: XCTestCase {
         )
 
         XCTAssertEqual(requestedEndpoints.values, [firstEndpoint, secondEndpoint])
-        XCTAssertEqual(service.snapshot().network.statusText, "Conectando a \(secondEndpoint.address)")
+        XCTAssertEqual(service.snapshot().network.statusText, "Connecting to \(secondEndpoint.address)")
         XCTAssertEqual(service.snapshot().servers.first(where: { $0.endpoint == firstEndpoint })?.status, .unavailable)
         XCTAssertEqual(service.preferredServerEndpoint(), secondEndpoint)
     }
@@ -791,7 +791,7 @@ final class CoreServiceTests: XCTestCase {
 
         let searchSnapshot = service.search(query: "ubuntu iso")
         XCTAssertEqual(requestedEndpoints.values, [endpoint])
-        XCTAssertEqual(searchSnapshot.network.statusText, "Conectando a \(endpoint.address)")
+        XCTAssertEqual(searchSnapshot.network.statusText, "Connecting to \(endpoint.address)")
         XCTAssertEqual(transport.sentData.count, 0)
 
         transport.simulateState(.ready)
@@ -848,7 +848,7 @@ final class CoreServiceTests: XCTestCase {
         firstTransport.simulateState(.cancelled)
 
         XCTAssertEqual(requestedEndpoints.values, [firstEndpoint, secondEndpoint])
-        XCTAssertEqual(service.snapshot().network.statusText, "Conectando a \(secondEndpoint.address)")
+        XCTAssertEqual(service.snapshot().network.statusText, "Connecting to \(secondEndpoint.address)")
 
         secondTransport.simulateState(.ready)
 
@@ -884,8 +884,8 @@ final class CoreServiceTests: XCTestCase {
         firstTransport.simulateState(.cancelled)
 
         XCTAssertEqual(requestedEndpoints.values, [firstEndpoint])
-        XCTAssertEqual(service.snapshot().network.statusText, "Sin conexion")
-        XCTAssertTrue(logs.values.contains(where: { $0.contains("reconexion") }))
+        XCTAssertEqual(service.snapshot().network.statusText, "Offline")
+        XCTAssertTrue(logs.values.contains(where: { $0.contains("reconnection") }))
     }
 
     func testFoundSourcesUpdatesTransferSourceCounts() throws {
@@ -2022,7 +2022,7 @@ final class CoreServiceTests: XCTestCase {
         // User-initiated disconnect should clear reconnect config
         let snapshot = service.disconnectServer()
         XCTAssertFalse(snapshot.network.isConnected)
-        XCTAssertEqual(snapshot.network.statusText, "Sin conexion")
+        XCTAssertEqual(snapshot.network.statusText, "Offline")
     }
 
     func testConnectToServerBootstrapsPersistedQueuedTransfersWithSourceLookup() throws {
@@ -2126,7 +2126,7 @@ final class CoreServiceTests: XCTestCase {
         _ = service.connectToServer(configuration, transport: transport)
         transport.simulateState(.failed("connection refused"))
 
-        XCTAssertTrue(logs.values.contains(where: { $0.contains("reconexion") }))
+        XCTAssertTrue(logs.values.contains(where: { $0.contains("reconnect") }))
         XCTAssertFalse(service.snapshot().network.isConnected)
     }
 
@@ -2143,7 +2143,7 @@ final class CoreServiceTests: XCTestCase {
         transport.simulateState(.ready)
         transport.simulateState(.cancelled)
 
-        XCTAssertTrue(logs.values.contains(where: { $0.contains("reconexion") }))
+        XCTAssertTrue(logs.values.contains(where: { $0.contains("reconnect") }))
     }
 
     func testWriteBlockTracksRealDownloadSpeed() throws {

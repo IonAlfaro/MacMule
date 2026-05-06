@@ -240,7 +240,7 @@ final class CoreRPCTests: XCTestCase {
         )
 
         XCTAssertNil(response.error)
-        XCTAssertEqual(response.result?.snapshot?.network.statusText, "Conectando a 127.0.0.1:4661")
+        XCTAssertEqual(response.result?.snapshot?.network.statusText, "Connecting to 127.0.0.1:4661")
         XCTAssertFalse(response.result?.snapshot?.network.isConnected ?? true)
     }
 
@@ -270,7 +270,7 @@ final class CoreRPCTests: XCTestCase {
         )
 
         XCTAssertNil(response.error)
-        XCTAssertEqual(response.result?.snapshot?.network.statusText, "Sin conexion")
+        XCTAssertEqual(response.result?.snapshot?.network.statusText, "Offline")
         XCTAssertFalse(response.result?.snapshot?.network.isConnected ?? true)
     }
 
@@ -413,7 +413,7 @@ final class CoreRPCTests: XCTestCase {
         )
 
         XCTAssertNil(response.error)
-        XCTAssertEqual(response.result?.snapshot?.network.statusText, "Conectando a 203.0.113.55:4661")
+        XCTAssertEqual(response.result?.snapshot?.network.statusText, "Connecting to 203.0.113.55:4661")
     }
 
     func testConnectServerUsesPersistedUserHashByDefault() throws {
