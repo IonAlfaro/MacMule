@@ -109,23 +109,6 @@ xcodebuild \
   build
 ```
 
-## Test
-
-```bash
-cd MacMuleCore
-swift test
-```
-
-## Release
-
-Push a version tag to trigger an automatic DMG build via GitHub Actions:
-
-```bash
-git tag v0.1.0 && git push origin v0.1.0
-```
-
-The `.dmg` will be attached to the release on the [Releases](https://github.com/IonAlfaro/MacMule/releases) page.
-
 ## Project Structure
 
 ```
